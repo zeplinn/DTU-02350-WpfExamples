@@ -1,0 +1,26 @@
+﻿<UserControl x:Name="userControl" x:Class="WpfExamples.Views.Components.ShapeUC"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:tumbTemplating.UserControls"
+             xmlns:shapes="clr-namespace:WpfExamples.ViewModels.Shapes"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=shapes:ShapeViewModel, IsDesignTimeCreatable=False }" >
+    <!--note that d:datacontext is purely used at design time for giving syntax highlightin an in 
+    no way will be the actual datacontext when the program is Running-->
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <DataTemplate DataType="{x:Type shapes:EllipseVm}">
+                <Ellipse Fill="Red"/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type shapes:RectangleVm}">
+                <Rectangle Fill="Green"/>
+            </DataTemplate>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid Width="{Binding Width}" Height="{Binding Height}">
+
+        <ContentPresenter Content="{Binding DataContext, ElementName=userControl}" />
+    </Grid>
+</UserControl>

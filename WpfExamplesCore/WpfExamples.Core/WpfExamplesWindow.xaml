@@ -1,0 +1,111 @@
+﻿<Window x:Class="WpfExamples.Core.WpfExamplesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfExamples.Core"
+        xmlns:toolBox="clr-namespace:WpfExamples.ToolBox;assembly=WpfExamples.ToolBox"
+        xmlns:viewModels="clr-namespace:WpfExamples.Core.ViewModels"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:triggerActions="clr-namespace:WpfExamples.ToolBox.Commands.TriggerActions;assembly=WpfExamples.ToolBox"
+        mc:Ignorable="d"
+        
+        Width="460"
+        MaxWidth="460"
+    
+        Title="WpfExamplesWindow" >
+    <Window.Resources>
+        <Style x:Key="Textblock-Header-Info" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="LightGray"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
+        </Style>
+        <Style x:Key="Textblock-Header-Info-Name" TargetType="TextBlock" BasedOn="{StaticResource Textblock-Header-Info}">
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="FontStyle" Value="Italic"/>
+        </Style>
+    </Window.Resources>
+    <Window.DataContext>
+        <viewModels:MainViewModel/>
+    </Window.DataContext>
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding TabForwardCommand}" CommandParameter="{Binding ElementName=DropdownBox}" Gesture="Tab"/>
+        <KeyBinding Command="{Binding TabBackWordCommand}" CommandParameter="{Binding ElementName=DropdownBox}" Gesture="Shift+Tab"/>
+    </Window.InputBindings>
+    <StackPanel >
+        <ComboBox x:Name="DropdownBox" ItemsSource="{Binding DropDown}" Height="25" SelectedIndex="0">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <triggerActions:WpfExamplesActionToCommand Command="{Binding SelectionChangedCommand}" CommandParameter="{Binding ElementName=DropdownBox}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <WrapPanel Background="{Binding Difficulty,ConverterParameter={StaticResource Color-Difficulty}}">
+                        <TextBlock Text="{Binding Header}" Margin="0,0,10,0" FontSize="14"/>
+                        <TextBlock Text="{Binding TabType}" FontSize="10" Foreground="#FF5F5F5F" FontStyle="Italic" LineStackingStrategy="BlockLineHeight" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </WrapPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+            <!--<ComboBox.ItemContainerStyle>
+                <Style TargetType="ComboBoxItem">
+                    <Setter Property="Content">
+                        <Setter.Value>
+                            
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ComboBox.ItemContainerStyle>-->
+        </ComboBox>
+
+        <Border Background="#FF3F3F46">
+
+            <Grid  Margin="5,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition />
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <WrapPanel Grid.ColumnSpan="2">
+                    <TextBlock Text="Primary Assembly:" Style="{StaticResource Textblock-Header-Info}"/>
+                    <TextBlock x:Name="TabAssemblyName" Text="{Binding SelectedItem.AssemblyName, ElementName=DropdownBox,TargetNullValue={} }" Style="{StaticResource Textblock-Header-Info-Name}"/>
+                </WrapPanel>
+                <WrapPanel Grid.Row="2" Grid.Column="2">
+                    <TextBlock Text="Last modified:" Style="{StaticResource Textblock-Header-Info}"/>
+                    <TextBlock Text="{Binding SelectedItem.Modified,ElementName=DropdownBox,TargetNullValue={}}" Style="{StaticResource Textblock-Header-Info-Name}"/>
+                </WrapPanel>
+                <WrapPanel Grid.Row="1" Grid.ColumnSpan="3">
+                    <TextBlock Text="Secondary Assemblies:" Style="{StaticResource Textblock-Header-Info}"/>
+                    <ItemsControl ItemsSource="{Binding SelectedItem.RefrencedSolutionAssemblies,ElementName=DropdownBox,TargetNullValue={}}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate >
+                                <TextBlock  Text="{Binding}" Style="{StaticResource Textblock-Header-Info-Name}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </WrapPanel>
+                <WrapPanel Grid.Row="2">
+                    <TextBlock Text="Difficulty:" Style="{StaticResource Textblock-Header-Info}"/>
+                    <TextBlock Text="{Binding SelectedItem.Difficulty,ElementName=DropdownBox,TargetNullValue={}}" Style="{StaticResource Textblock-Header-Info-Name}"/>
+                </WrapPanel>
+                <WrapPanel Grid.Row="2" Grid.Column="1">
+                    <TextBlock Text="Status:" Style="{StaticResource Textblock-Header-Info}"/>
+                    <TextBlock Text="{Binding SelectedItem.Status,ElementName=DropdownBox,TargetNullValue={}}" Style="{StaticResource Textblock-Header-Info-Name}"/>
+                </WrapPanel>
+            </Grid>
+        </Border>
+        <ContentPresenter Content="{Binding Content}"/>
+    </StackPanel>
+</Window>

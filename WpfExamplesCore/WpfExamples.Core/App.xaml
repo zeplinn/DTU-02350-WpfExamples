@@ -1,0 +1,15 @@
+﻿<Application x:Class="WpfExamples.Core.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:WpfExamples.Core"
+             StartupUri="WpfExamplesWindow.xaml">
+    <Application.Resources>
+        <local:DifficultyColorSelector x:Key="Color-Difficulty"/>
+        <Style x:Key="Tab" TargetType="UserControl">
+            <Setter Property="Width" Value="{Binding Width}"/>
+            <Setter Property="Height" Value="1000"/>
+            <Setter Property="MinWidth" Value="430"/>
+            <Setter Property="MaxWidth" Value="860"/>
+        </Style>
+    </Application.Resources>
+</Application>

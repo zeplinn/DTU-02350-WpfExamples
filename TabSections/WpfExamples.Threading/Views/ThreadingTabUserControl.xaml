@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="WpfExamples.Views.ThreadingTabUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:WpfExamples.ViewModels"
+             Background="White"
+             mc:Ignorable="d" 
+             
+             d:DesignHeight="700" d:DesignWidth="600">
+    <UserControl.DataContext>
+        <viewModels:ThreadingTabViewModel/>
+    </UserControl.DataContext>
+    <!--d:DataContext only set the data context at designtime, at tuntime DataContext is inherited from Maindow-->
+    <StackPanel>
+
+        <TextBlock Text="Threading" Margin="0,10,0,0" FontSize="20" FontWeight="Bold"/>
+        <Separator Height="2" Background="Black"/>
+        
+        <StackPanel Orientation="Vertical" Margin="0,25,0,0">
+            <TextBlock TextWrapping="Wrap" Text="doing heavy work on the ui thread with a standard command will freeze the ui and make it unresponsive and prone to crashing"/>
+            <Button Content="Heavy Process 1 (using gui thread)" Command="{Binding HeavyProcess}" />
+            
+            <TextBlock TextWrapping="Wrap" Text="Perform some heavy process in a new thread"/>
+            <Button Content="Heavy Process 1 (using new thread)" Command="{Binding HeavyProcessOnNewThread}" />
+            
+            <TextBox Text="{Binding HeavyProcessValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="25" Width="200" HorizontalAlignment="Left" VerticalAlignment="Top" IsReadOnly="True"/>
+            <ProgressBar Minimum="{Binding ProgressMin}" Maximum="{Binding ProgressMax}" Value="{Binding ProgressValue}" Height="25"/>
+        </StackPanel>
+        <StackPanel Orientation="Vertical" Margin="0,25,0,0">
+            <TextBlock TextWrapping="Wrap" Text="We cannot create a UI element on a different thread. If we try do this, we MUST invoke the dispatcher to delegate the work to the UI thread"/>
+            <Button Content="Create Textbox" Command="{Binding CreateUIElementInThread}" />
+            <ContentPresenter Content="{Binding MyControl}"/>
+        </StackPanel>
+        <StackPanel Orientation="Vertical" Margin="0,25,0,0">
+            <TextBlock TextWrapping="Wrap" Text="Likewise we cannot set the datacontext or other properties of a UI element from any other thread than the UI thread."/>
+
+            <TextBlock TextWrapping="Wrap" Text="If we try do this, we MUST invoke the dispatcher to delegate the work to the UI thread."/>
+            <Button Content="Create object" Command="{Binding CreateModel}" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>
