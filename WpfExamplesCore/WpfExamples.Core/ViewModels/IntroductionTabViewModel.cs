@@ -13,7 +13,10 @@ namespace WpfExamples.Core.ViewModels
         {
             get
             {
-                var dir = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.GetFiles("Introduction.xps",SearchOption.AllDirectories).First().FullName;
+                var dir = Directory.GetParent(Directory.GetCurrentDirectory())
+                            .Parent
+                            .GetFiles("Introduction.xps",SearchOption.AllDirectories
+                        ).First().FullName;
                 
                 return new XpsDocument(dir, FileAccess.Read).GetFixedDocumentSequence();
             
